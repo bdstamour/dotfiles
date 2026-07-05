@@ -1,0 +1,6 @@
+# Backups created by bootstrap.sh
+*.bak
+
+# OS cruft
+.DS_Store
+Thumbs.db

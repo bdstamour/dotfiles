@@ -1,0 +1,10 @@
+# LazyVim standard ignores (commit lazy-lock.json and lazyvim.json for
+# reproducible plugin versions and to record enabled extras).
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data

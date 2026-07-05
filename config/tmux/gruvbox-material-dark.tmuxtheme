@@ -1,0 +1,72 @@
+# Name: Gruvbox Material
+# Variant: Dark (medium background, material foreground)
+# URL: https://github.com/sainnhe/gruvbox-material
+# Description: A warm, muted retro dark color scheme.
+# Note: Color hexes in lower case to avoid tmux flag confusion
+
+# base / background
+gm_bg0="#282828"
+gm_bg1="#32302f"
+gm_bg2="#3a3735"
+gm_bg3="#45403d"
+gm_bg4="#504945"
+gm_bg5="#5a524c"
+# foreground / greys
+gm_fg0="#d4be98"
+gm_fg1="#ddc7a1"
+gm_grey0="#7c6f64"
+gm_grey1="#928374"
+gm_grey2="#a89984"
+# accents
+gm_red="#ea6962"
+gm_orange="#e78a4e"
+gm_yellow="#d8a657"
+gm_green="#a9b665"
+gm_aqua="#89b482"
+gm_blue="#7daea3"
+gm_purple="#d3869b"
+
+# semantic aliases
+color_bg_1=$gm_bg0
+color_bg_2=$gm_bg1
+color_ui_1=$gm_bg3
+color_ui_2=$gm_bg4
+color_tx_1=$gm_fg0
+color_tx_2=$gm_grey2
+color_tx_3=$gm_grey0
+
+# status
+set -g status "on"
+set -g status-bg $color_bg_2
+set -g status-justify "left"
+set -g status-left-length "100"
+set -g status-right-length "100"
+set -g status-style "fg=$color_tx_2,bg=$color_bg_2"
+
+# messages
+set -g message-style "fg=$color_tx_1,bg=$color_ui_1"
+set -g message-command-style "fg=$color_tx_1,bg=$color_ui_1"
+
+# panes
+set -g pane-border-style "fg=$color_ui_2"
+set -g pane-active-border-style "fg=$gm_blue"
+
+# copy-mode selection
+set -g mode-style "fg=$color_bg_1,bg=$gm_yellow,bold"
+
+# clock
+setw -g clock-mode-colour $gm_blue
+
+# statusline: session name on the left (turns red when prefix pressed)
+set -g status-left "#{?client_prefix,#[fg=$color_bg_1#,bg=$gm_red#,bold],#[fg=$color_bg_1#,bg=$gm_green#,bold]} #S #{?client_prefix,#[fg=$gm_red#,bg=$color_bg_2],#[fg=$gm_green#,bg=$color_bg_2]}"
+
+# statusline: path + date/time on the right
+set -g status-right "#[fg=$gm_orange,bg=$color_bg_2]#[fg=$color_bg_1,bg=$gm_orange,bold]  #{b:pane_current_path} #[fg=$gm_purple,bg=$gm_orange]#[fg=$color_bg_1,bg=$gm_purple,bold]  %Y-%m-%d %H:%M "
+
+# windows
+setw -g window-status-separator ""
+setw -g window-status-style "fg=$color_tx_2,bg=$color_bg_2,none"
+setw -g window-status-activity-style "fg=$gm_yellow,bg=$color_bg_2,none"
+setw -g window-status-bell-style "fg=$gm_red,bg=$color_bg_2,bold"
+setw -g window-status-format "#[fg=$color_tx_2,bg=$color_bg_2] #I:#W#{?window_flags,#{window_flags}, } "
+setw -g window-status-current-format "#[fg=$color_bg_2,bg=$color_ui_2]#[fg=$color_tx_1,bg=$color_ui_2,bold] #I:#W#{?window_flags,#{window_flags}, } #[fg=$color_ui_2,bg=$color_bg_2]"
