@@ -78,3 +78,10 @@ fi
 # Powerlevel10k config — run `p10k configure` or edit ~/.p10k.zsh.
 # -----------------------------------------------------------------------------
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# -----------------------------------------------------------------------------
+# Machine-local overrides and private exports.
+# ~/.zshrc.local lives in $HOME (not this repo), so secrets/host-specific vars
+# stay untracked. Sourced last so it can override anything above.
+# -----------------------------------------------------------------------------
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

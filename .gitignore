@@ -1,5 +1,11 @@
-# Backups created by bootstrap.sh
+# Editor / tool backup + swap files
 *.bak
+*.swp
+*.swo
+*~
+
+# Machine-local zsh overrides / private exports (kept out of the repo).
+.zshrc.local
 
 # OS cruft
 .DS_Store

@@ -1,0 +1,14 @@
+# lazy-lock.json is intentionally NOT tracked — each machine installs the latest
+# plugins on bootstrap rather than pinned versions. (lazyvim.json stays tracked to
+# record enabled extras.)
+lazy-lock.json
+
+# LazyVim standard ignores.
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data

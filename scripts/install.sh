@@ -18,6 +18,10 @@ err()   { printf '\033[1;31m[x]\033[0m %s\n' "$*" >&2; }
 
 command_exists() { command -v "$1" >/dev/null 2>&1; }
 
+# Absolute path to the directory containing this script (scripts/); bootstrap.sh
+# is a sibling in the same directory.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 if [[ "${EUID}" -eq 0 ]]; then
   SUDO=""
 else
@@ -41,6 +45,7 @@ install_base_deps() {
     ripgrep \
     fd-find \
     fzf \
+    stow \
     xclip
 }
 
@@ -220,25 +225,60 @@ set_default_shell() {
 }
 
 # -----------------------------------------------------------------------------
+# 7. Symlink configs + install plugins (via bootstrap.sh)
+# -----------------------------------------------------------------------------
+run_bootstrap() {
+  local bootstrap="$SCRIPT_DIR/bootstrap.sh"
+  if [[ ! -x "$bootstrap" ]]; then
+    warn "bootstrap.sh not found or not executable; skipping. Run it manually to link configs."
+    return
+  fi
+
+  # Neovim was installed into ~/.local/bin, which may not be on PATH in this
+  # shell yet. Add it so bootstrap.sh can find nvim and sync LazyVim plugins.
+  export PATH="$HOME/.local/bin:$PATH"
+
+  info "Running bootstrap.sh to symlink configs and install plugins..."
+  # Don't let a Stow conflict (pre-existing configs) abort the whole install;
+  # surface it as a warning so the completion message still prints.
+  if "$bootstrap"; then
+    info "bootstrap.sh completed."
+  else
+    warn "bootstrap.sh reported errors (e.g. Stow found existing files). Resolve them and re-run ./scripts/bootstrap.sh."
+  fi
+}
+
+# -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 main() {
   info "Starting dotfiles installation..."
+
+  # This installer targets Debian/Ubuntu (incl. WSL2). Bail out early with a
+  # clear message on other systems rather than failing deep inside apt calls.
+  if ! command_exists apt-get; then
+    err "apt-get not found — this installer supports Debian/Ubuntu only."
+    err "Install the tools listed in the README manually, then run ./scripts/bootstrap.sh."
+    exit 1
+  fi
+
   install_base_deps
   install_tmux
   install_zsh
   install_neovim
   install_font
   set_default_shell
+  run_bootstrap
 
   echo
   info "Installation complete!"
   echo
   cat <<'EOF'
 Next steps:
-  1. Run ./bootstrap.sh to symlink the config files and install tmux/nvim plugins.
-  2. Set your terminal font to "FiraCode Nerd Font".
-  3. Log out / restart your terminal so the zsh login shell takes effect.
+  1. Set your terminal font to "FiraCode Nerd Font".
+  2. Log out / restart your terminal so the zsh login shell takes effect.
+
+If bootstrap.sh was skipped or hit conflicts above, run ./scripts/bootstrap.sh manually.
 EOF
 }
 
